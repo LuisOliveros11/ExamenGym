@@ -1,10 +1,13 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Ventana extends JFrame{
@@ -21,13 +24,14 @@ public class Ventana extends JFrame{
 		JPanel barra_lateral = new JPanel();
 		barra_lateral.setSize(250, 550);
 		barra_lateral.setLocation(0, 0);
-		barra_lateral.setBackground(Color.gray);
+		barra_lateral.setBackground(Color.decode("#713587"));
 		barra_lateral.setLayout(null);
 		this.add(barra_lateral);
 		
+		
 		contenido.setSize(650, 550);
 		contenido.setLocation(250, 0);
-		contenido.setBackground(Color.yellow);
+		contenido.setBackground(Color.decode("#EEE5DA"));
 		contenido.setLayout(null);
 		this.add(contenido);
 		
@@ -64,6 +68,16 @@ public class Ventana extends JFrame{
 		btn_CerrarSesion.setLocation(50,440);
 		btn_CerrarSesion.setFont(new Font("Arial", Font.BOLD, 17));
 		barra_lateral.add(btn_CerrarSesion);
+		
+		ImageIcon foto = new ImageIcon("logogym.png");
+		JLabel icono = new JLabel();
+		icono.setSize(100,100);
+		icono.setLocation(75,60);
+		icono.setIcon(new ImageIcon(foto.getImage().getScaledInstance(icono.getWidth(), icono.getHeight(), Image.SCALE_SMOOTH)));
+		barra_lateral.add(icono);
+		
+		this.revalidate();
+		this.repaint();
 	}
 	
 	public void panel_Tarifas() {
