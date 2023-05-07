@@ -3,6 +3,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,6 +16,7 @@ import java.io.PrintWriter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,8 +40,7 @@ public class Ventana extends JFrame {
 		this.setLayout(null);
 		this.setTitle("GYM");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		padre = panel_Login();
-		this.add(padre);
+		volver_login();
 
 		barra_lateral.setSize(250, 550);
 		barra_lateral.setLocation(0, 0);
@@ -55,7 +57,7 @@ public class Ventana extends JFrame {
 		btn_Clientes.setLocation(50, 230);
 		btn_Clientes.setFont(new Font("Arial", Font.BOLD, 23));
 		barra_lateral.add(btn_Clientes);
-		
+
 		btn_Clientes.addActionListener(new ActionListener() {
 
 			@Override
@@ -65,7 +67,7 @@ public class Ventana extends JFrame {
 				contenido.revalidate();
 				contenido.repaint();
 			}
-			
+
 		});
 
 		JButton btn_Tarifas = new JButton("Tarifas");
@@ -95,15 +97,18 @@ public class Ventana extends JFrame {
 		btn_CerrarSesion.setLocation(50, 440);
 		btn_CerrarSesion.setFont(new Font("Arial", Font.BOLD, 17));
 		barra_lateral.add(btn_CerrarSesion);
-		btn_CerrarSesion.addActionListener(new ActionListener() {
 
+		btn_CerrarSesion.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				JOptionPane.showMessageDialog(null, "Cerrando sesion...");
-				System.exit(0);
+				padre.removeAll();
+				volver_login();
+				padre.revalidate();
+				padre.repaint();
+
 			}
-			
 		});
 
 		ImageIcon foto = new ImageIcon("logogym.png");
@@ -111,7 +116,7 @@ public class Ventana extends JFrame {
 		icono.setSize(100, 100);
 		icono.setLocation(75, 60);
 		icono.setIcon(new ImageIcon(
-		foto.getImage().getScaledInstance(icono.getWidth(), icono.getHeight(), Image.SCALE_SMOOTH)));
+				foto.getImage().getScaledInstance(icono.getWidth(), icono.getHeight(), Image.SCALE_SMOOTH)));
 		barra_lateral.add(icono);
 
 		this.revalidate();
@@ -119,25 +124,22 @@ public class Ventana extends JFrame {
 	}
 
 	public JPanel panel_Login() {
-		
+
 		JPanel login = new JPanel();
 		login.setVisible(true);
 		login.setSize(900, 550);
 		login.setLocation(0, 0);
 		login.setBackground(Color.decode("#EEE5DA"));
 		login.setLayout(null);
-		
-		//imagen del panel de login 
+
+		// imagen del panel de login
 		ImageIcon foto2 = new ImageIcon("logo_login2.png");
 		JLabel icono2 = new JLabel();
 		icono2.setSize(150, 150);
 		icono2.setLocation(580, 180);
 		icono2.setIcon(new ImageIcon(
-		foto2.getImage().getScaledInstance(icono2.getWidth(), icono2.getHeight(), Image.SCALE_SMOOTH)));
+				foto2.getImage().getScaledInstance(icono2.getWidth(), icono2.getHeight(), Image.SCALE_SMOOTH)));
 		login.add(icono2);
-
-		this.revalidate();
-		this.repaint();
 
 		JLabel userName = new JLabel("Ingresa tu nombre: ");
 		userName.setSize(200, 20);
@@ -229,22 +231,28 @@ public class Ventana extends JFrame {
 		});
 		return login;
 	}
-	
+
+	public void volver_login() {
+		contenido.removeAll();
+		padre = panel_Login();
+		this.add(padre);
+	}
+
 	public void panel_clientes() {
 		contenido.removeAll();
-		
+
 		JLabel titulo2 = new JLabel("Panel de clientes", JLabel.CENTER);
 		titulo2.setSize(650, 30);
 		titulo2.setLocation(0, 20);
 		titulo2.setFont(new Font("Arial", Font.BOLD, 23));
 		contenido.add(titulo2);
-		
+
 		JButton btn_Consultar_clientes = new JButton("Consultar");
 		btn_Consultar_clientes.setSize(150, 40);
 		btn_Consultar_clientes.setLocation(100, 300);
 		btn_Consultar_clientes.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Consultar_clientes);
-		
+
 		btn_Consultar_clientes.addActionListener(new ActionListener() {
 
 			@Override
@@ -254,15 +262,15 @@ public class Ventana extends JFrame {
 				contenido.revalidate();
 				contenido.repaint();
 			}
-			
+
 		});
-		
+
 		JButton btn_Crear = new JButton("Crear");
 		btn_Crear.setSize(150, 40);
 		btn_Crear.setLocation(400, 300);
 		btn_Crear.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Crear);
-		
+
 		JButton btn_Editar = new JButton("Editar");
 		btn_Editar.setSize(150, 40);
 		btn_Editar.setLocation(100, 440);
@@ -274,8 +282,9 @@ public class Ventana extends JFrame {
 		btn_Eliminar.setLocation(400, 440);
 		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Eliminar);
-		
+
 	}
+
 	public void panel_Tarifas() {
 		contenido.removeAll();
 
@@ -284,7 +293,7 @@ public class Ventana extends JFrame {
 		titulo3.setLocation(0, 20);
 		titulo3.setFont(new Font("Arial", Font.BOLD, 23));
 		contenido.add(titulo3);
-		
+
 		JButton btn_Consultar = new JButton("Consultar");
 		btn_Consultar.setSize(150, 40);
 		btn_Consultar.setLocation(100, 300);
@@ -319,16 +328,32 @@ public class Ventana extends JFrame {
 		btn_Editar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Editar);
 
+		btn_Editar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_Tarifas_Editar();
+			}
+		});
+
 		JButton btn_Eliminar = new JButton("Eliminar");
 		btn_Eliminar.setSize(150, 40);
 		btn_Eliminar.setLocation(400, 440);
 		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Eliminar);
+		
+		btn_Eliminar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_Tarifas_Eliminar();
+			}
+		});
 	}
-	
+
 	public void panel_clientes_consultar() {
 		contenido.removeAll();
-		
+
 		JLabel titulo = new JLabel("Datos de los clientes", JLabel.CENTER);
 		titulo.setSize(650, 30);
 		titulo.setLocation(0, 80);
@@ -340,7 +365,7 @@ public class Ventana extends JFrame {
 		FileInputStream cliente;
 		datos_Tarifas = null;
 		datos_Clientes = null;
-		
+
 		try {
 			cliente = new FileInputStream("Users.txt");
 			reader_Tarifa = new BufferedReader(new FileReader("Tarifas.txt"));
@@ -389,7 +414,7 @@ public class Ventana extends JFrame {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		JButton volver = new JButton("Volver");
 		volver.setSize(200, 35);
 		volver.setLocation(100, 470);
@@ -397,7 +422,7 @@ public class Ventana extends JFrame {
 		volver.setOpaque(true);
 		volver.setBackground(Color.decode("#713587"));
 		contenido.add(volver);
-		
+
 		volver.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -412,8 +437,7 @@ public class Ventana extends JFrame {
 		contenido.revalidate();
 		contenido.repaint();
 	}
-	
-	
+
 	public void panel_Tarifas_Consultar() {
 		contenido.removeAll();
 
@@ -561,7 +585,7 @@ public class Ventana extends JFrame {
 
 		JButton crear = new JButton("Crear tarifa");
 		crear.setSize(200, 35);
-		crear.setLocation(340, 470);
+		crear.setLocation(340, 460);
 		crear.setForeground(Color.decode("#EEE5DA"));
 		crear.setOpaque(true);
 		crear.setBackground(Color.decode("#713587"));
@@ -635,12 +659,12 @@ public class Ventana extends JFrame {
 
 		JButton volver = new JButton("Volver");
 		volver.setSize(200, 35);
-		volver.setLocation(100, 470);
+		volver.setLocation(100, 460);
 		volver.setForeground(Color.decode("#EEE5DA"));
 		volver.setOpaque(true);
 		volver.setBackground(Color.decode("#713587"));
 		contenido.add(volver);
-		
+
 		volver.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -652,6 +676,206 @@ public class Ventana extends JFrame {
 			}
 		});
 
+		contenido.revalidate();
+		contenido.repaint();
+	}
+
+	public void panel_Tarifas_Editar() {
+		contenido.removeAll();
+		int contador = 1;
+
+		JLabel titulo = new JLabel("Editar tarifa", JLabel.CENTER);
+		titulo.setSize(650, 30);
+		titulo.setLocation(0, 80);
+		titulo.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo);
+
+		JComboBox clientes = new JComboBox();
+		clientes.setSize(440, 30);
+		clientes.setLocation(100, 120);
+		contenido.add(clientes);
+
+		JLabel indicacion = new JLabel("Selecciona el teléfono de el cliente al que deseas editar su tarifa",
+				JLabel.CENTER);
+		indicacion.setSize(650, 20);
+		indicacion.setLocation(0, 150);
+		indicacion.setFont(new Font("Arial", Font.BOLD, 11));
+		contenido.add(indicacion);
+
+		JLabel telefono = new JLabel("Cliente (Número de teléfono)");
+		telefono.setSize(280, 30);
+		telefono.setLocation(60, 200);
+		telefono.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono);
+
+		JTextField in_Telefono = new JTextField();
+		in_Telefono.setSize(250, 30);
+		in_Telefono.setLocation(50, 250);
+		in_Telefono.setFont(new Font("Arial", Font.BOLD, 17));
+		in_Telefono.setEditable(false);
+		contenido.add(in_Telefono);
+
+		JLabel cuota = new JLabel("Cuota mensual");
+		cuota.setSize(150, 30);
+		cuota.setLocation(405, 200);
+		cuota.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(cuota);
+
+		JTextField in_Cuota = new JTextField();
+		in_Cuota.setSize(250, 30);
+		in_Cuota.setLocation(340, 250);
+		in_Cuota.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Cuota);
+
+		JLabel fecha_Inicial = new JLabel("Fecha valida inicial (dd/mm/yyyy)");
+		fecha_Inicial.setSize(280, 30);
+		fecha_Inicial.setLocation(45, 330);
+		fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(fecha_Inicial);
+
+		JTextField in_Fecha_Inicial = new JTextField();
+		in_Fecha_Inicial.setSize(250, 30);
+		in_Fecha_Inicial.setLocation(50, 380);
+		in_Fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Fecha_Inicial);
+
+		JLabel fecha_Final = new JLabel("Fecha valida final (dd/mm/yyyy)");
+		fecha_Final.setSize(280, 30);
+		fecha_Final.setLocation(345, 330);
+		fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(fecha_Final);
+
+		JTextField in_Fecha_Final = new JTextField();
+		in_Fecha_Final.setSize(250, 30);
+		in_Fecha_Final.setLocation(340, 380);
+		in_Fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Fecha_Final);
+		
+		JButton guardar_Cambios = new JButton("Guardar cambios");
+		guardar_Cambios.setSize(200, 35);
+		guardar_Cambios.setLocation(340, 460);
+		guardar_Cambios.setForeground(Color.decode("#EEE5DA"));
+		guardar_Cambios.setOpaque(true);
+		guardar_Cambios.setBackground(Color.decode("#713587"));
+		contenido.add(guardar_Cambios);
+
+		JButton volver = new JButton("Volver");
+		volver.setSize(200, 35);
+		volver.setLocation(100, 460);
+		volver.setForeground(Color.decode("#EEE5DA"));
+		volver.setOpaque(true);
+		volver.setBackground(Color.decode("#713587"));
+		contenido.add(volver);
+		
+		datos_Tarifas = null;
+		BufferedReader reader_Tarifas;
+
+		// CODIGO PARA LLENAR EL COMBOBOX CON LOS CLIENTES REGISTRADOS
+		try {
+			reader_Tarifas = new BufferedReader(new FileReader("Tarifas.txt"));
+			String line = reader_Tarifas.readLine();
+
+			while (line != null) {
+				datos_Tarifas = line.split(",");
+				clientes.addItem(datos_Tarifas[0]);
+				// Leer la siguiente linea
+				line = reader_Tarifas.readLine();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		contenido.revalidate();
+		contenido.repaint();
+	}
+
+	public void panel_Tarifas_Eliminar() {
+		contenido.removeAll();
+
+		JLabel titulo = new JLabel("Eliminar tarifa", JLabel.CENTER);
+		titulo.setSize(650, 30);
+		titulo.setLocation(0, 80);
+		titulo.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo);
+
+		JComboBox clientes = new JComboBox();
+		clientes.setSize(440, 30);
+		clientes.setLocation(100, 120);
+		contenido.add(clientes);
+
+		JLabel indicacion = new JLabel("Selecciona el teléfono de el cliente al que deseas eliminar su tarifa",
+				JLabel.CENTER);
+		indicacion.setSize(650, 20);
+		indicacion.setLocation(0, 150);
+		indicacion.setFont(new Font("Arial", Font.BOLD, 11));
+		contenido.add(indicacion);
+
+		JLabel telefono = new JLabel("Cliente (Número de teléfono)");
+		telefono.setSize(280, 30);
+		telefono.setLocation(60, 200);
+		telefono.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono);
+
+		JTextField in_Telefono = new JTextField();
+		in_Telefono.setSize(250, 30);
+		in_Telefono.setLocation(50, 250);
+		in_Telefono.setFont(new Font("Arial", Font.BOLD, 17));
+		in_Telefono.setEditable(false);
+		contenido.add(in_Telefono);
+
+		JLabel cuota = new JLabel("Cuota mensual");
+		cuota.setSize(150, 30);
+		cuota.setLocation(405, 200);
+		cuota.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(cuota);
+
+		JTextField in_Cuota = new JTextField();
+		in_Cuota.setSize(250, 30);
+		in_Cuota.setLocation(340, 250);
+		in_Cuota.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Cuota);
+
+		JLabel fecha_Inicial = new JLabel("Fecha valida inicial (dd/mm/yyyy)");
+		fecha_Inicial.setSize(280, 30);
+		fecha_Inicial.setLocation(45, 330);
+		fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(fecha_Inicial);
+
+		JTextField in_Fecha_Inicial = new JTextField();
+		in_Fecha_Inicial.setSize(250, 30);
+		in_Fecha_Inicial.setLocation(50, 380);
+		in_Fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Fecha_Inicial);
+
+		JLabel fecha_Final = new JLabel("Fecha valida final (dd/mm/yyyy)");
+		fecha_Final.setSize(280, 30);
+		fecha_Final.setLocation(345, 330);
+		fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(fecha_Final);
+
+		JTextField in_Fecha_Final = new JTextField();
+		in_Fecha_Final.setSize(250, 30);
+		in_Fecha_Final.setLocation(340, 380);
+		in_Fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Fecha_Final);
+		
+		JButton guardar_Cambios = new JButton("Eliminar tarifa");
+		guardar_Cambios.setSize(200, 35);
+		guardar_Cambios.setLocation(340, 460);
+		guardar_Cambios.setForeground(Color.decode("#EEE5DA"));
+		guardar_Cambios.setOpaque(true);
+		guardar_Cambios.setBackground(Color.decode("#713587"));
+		contenido.add(guardar_Cambios);
+
+		JButton volver = new JButton("Volver");
+		volver.setSize(200, 35);
+		volver.setLocation(100, 460);
+		volver.setForeground(Color.decode("#EEE5DA"));
+		volver.setOpaque(true);
+		volver.setBackground(Color.decode("#713587"));
+		contenido.add(volver);
+		
 		contenido.revalidate();
 		contenido.repaint();
 	}
