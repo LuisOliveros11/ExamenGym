@@ -63,7 +63,7 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				panel_clientes();
+				panel_Clientes();
 				contenido.revalidate();
 				contenido.repaint();
 			}
@@ -133,7 +133,7 @@ public class Ventana extends JFrame {
 		login.setLayout(null);
 
 		// imagen del panel de login
-		ImageIcon foto2 = new ImageIcon("logo_login2.png");
+		ImageIcon foto2 = new ImageIcon("mancuerna.png");
 		JLabel icono2 = new JLabel();
 		icono2.setSize(150, 150);
 		icono2.setLocation(580, 180);
@@ -238,7 +238,7 @@ public class Ventana extends JFrame {
 		this.add(padre);
 	}
 
-	public void panel_clientes() {
+	public void panel_Clientes() {
 		contenido.removeAll();
 
 		JLabel titulo2 = new JLabel("Panel de clientes", JLabel.CENTER);
@@ -270,6 +270,17 @@ public class Ventana extends JFrame {
 		btn_Crear.setLocation(400, 300);
 		btn_Crear.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Crear);
+		btn_Crear.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes_crear();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+			
+		});
 
 		JButton btn_Editar = new JButton("Editar");
 		btn_Editar.setSize(150, 40);
@@ -391,8 +402,7 @@ public class Ventana extends JFrame {
 					}
 				}
 				if (line_Cliente != null) {
-					tablaModel.addRow(new Object[] { datos_Clientes[0] + " " + datos_Clientes[1], datos_Tarifas[1],
-							datos_Tarifas[2], datos_Tarifas[3] });
+					tablaModel.addRow(new Object[] { datos_Clientes[0] + " " + datos_Clientes[1], datos_Clientes[1], datos_Clientes[2], datos_Clientes[3], datos_Tarifas[1] });
 				}
 				// Leer siguiente linea del archivo de tarifas
 				line_Tarifa = reader_Tarifa.readLine();
@@ -428,7 +438,7 @@ public class Ventana extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				contenido.removeAll();
-				panel_Tarifas();
+				panel_Clientes();
 				contenido.revalidate();
 				contenido.repaint();
 			}
@@ -526,6 +536,91 @@ public class Ventana extends JFrame {
 		contenido.repaint();
 	}
 
+	public void panel_clientes_crear() {
+		contenido.removeAll();
+		
+		JLabel titulo = new JLabel("Añadir cliente", JLabel.CENTER);
+		titulo.setSize(650, 30);
+		titulo.setLocation(0, 80);
+		titulo.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo);
+		
+		JLabel telefono = new JLabel("Nombre");
+		telefono.setSize(280, 30);
+		telefono.setLocation(60, 170);
+		telefono.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono);
+
+		JTextField in_Telefono = new JTextField();
+		in_Telefono.setSize(250, 30);
+		in_Telefono.setLocation(50, 220);
+		in_Telefono.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Telefono);
+
+		JLabel cuota = new JLabel("Apellidos");
+		cuota.setSize(150, 30);
+		cuota.setLocation(346, 170);
+		cuota.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(cuota);
+
+		JTextField in_Cuota = new JTextField();
+		in_Cuota.setSize(250, 30);
+		in_Cuota.setLocation(340, 220);
+		in_Cuota.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Cuota);
+
+		JLabel fecha_Inicial = new JLabel("Fecha de nacimiento");
+		fecha_Inicial.setSize(280, 30);
+		fecha_Inicial.setLocation(45, 300);
+		fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(fecha_Inicial);
+
+		JTextField in_Fecha_Inicial = new JTextField();
+		in_Fecha_Inicial.setSize(250, 30);
+		in_Fecha_Inicial.setLocation(50, 350);
+		in_Fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Fecha_Inicial);
+
+		JLabel fecha_Final = new JLabel("Telefono celular");
+		fecha_Final.setSize(280, 30);
+		fecha_Final.setLocation(345, 300);
+		fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(fecha_Final);
+
+		JTextField in_Fecha_Final = new JTextField();
+		in_Fecha_Final.setSize(250, 30);
+		in_Fecha_Final.setLocation(340, 350);
+		in_Fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Fecha_Final);
+
+		JButton crear = new JButton("Añadir cliente");
+		crear.setSize(200, 35);
+		crear.setLocation(340, 460);
+		crear.setForeground(Color.decode("#EEE5DA"));
+		crear.setOpaque(true);
+		crear.setBackground(Color.decode("#713587"));
+		contenido.add(crear);
+		
+		JButton volver = new JButton("Volver");
+		volver.setSize(200, 35);
+		volver.setLocation(100, 460);
+		volver.setForeground(Color.decode("#EEE5DA"));
+		volver.setOpaque(true);
+		volver.setBackground(Color.decode("#713587"));
+		contenido.add(volver);
+
+		volver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				contenido.removeAll();
+				panel_Clientes();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+		});
+	}
+	
 	public void panel_Tarifas_Crear() {
 		contenido.removeAll();
 
@@ -766,6 +861,17 @@ public class Ventana extends JFrame {
 		volver.setOpaque(true);
 		volver.setBackground(Color.decode("#713587"));
 		contenido.add(volver);
+
+		volver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				contenido.removeAll();
+				panel_Tarifas();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+		});
 		
 		datos_Tarifas = null;
 		BufferedReader reader_Tarifas;
@@ -875,6 +981,17 @@ public class Ventana extends JFrame {
 		volver.setOpaque(true);
 		volver.setBackground(Color.decode("#713587"));
 		contenido.add(volver);
+
+		volver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				contenido.removeAll();
+				panel_Tarifas();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+		});
 		
 		contenido.revalidate();
 		contenido.repaint();
