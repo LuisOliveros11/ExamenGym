@@ -55,6 +55,18 @@ public class Ventana extends JFrame {
 		btn_Clientes.setLocation(50, 230);
 		btn_Clientes.setFont(new Font("Arial", Font.BOLD, 23));
 		barra_lateral.add(btn_Clientes);
+		
+		btn_Clientes.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+			
+		});
 
 		JButton btn_Tarifas = new JButton("Tarifas");
 		btn_Tarifas.setSize(150, 40);
@@ -83,13 +95,23 @@ public class Ventana extends JFrame {
 		btn_CerrarSesion.setLocation(50, 440);
 		btn_CerrarSesion.setFont(new Font("Arial", Font.BOLD, 17));
 		barra_lateral.add(btn_CerrarSesion);
+		btn_CerrarSesion.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JOptionPane.showMessageDialog(null, "Cerrando sesion...");
+				System.exit(0);
+			}
+			
+		});
 
 		ImageIcon foto = new ImageIcon("logogym.png");
 		JLabel icono = new JLabel();
 		icono.setSize(100, 100);
 		icono.setLocation(75, 60);
 		icono.setIcon(new ImageIcon(
-				foto.getImage().getScaledInstance(icono.getWidth(), icono.getHeight(), Image.SCALE_SMOOTH)));
+		foto.getImage().getScaledInstance(icono.getWidth(), icono.getHeight(), Image.SCALE_SMOOTH)));
 		barra_lateral.add(icono);
 
 		this.revalidate();
@@ -97,12 +119,25 @@ public class Ventana extends JFrame {
 	}
 
 	public JPanel panel_Login() {
+		
 		JPanel login = new JPanel();
 		login.setVisible(true);
 		login.setSize(900, 550);
 		login.setLocation(0, 0);
 		login.setBackground(Color.decode("#EEE5DA"));
 		login.setLayout(null);
+		
+		//imagen del panel de login 
+		ImageIcon foto2 = new ImageIcon("logo_login2.png");
+		JLabel icono2 = new JLabel();
+		icono2.setSize(150, 150);
+		icono2.setLocation(580, 180);
+		icono2.setIcon(new ImageIcon(
+		foto2.getImage().getScaledInstance(icono2.getWidth(), icono2.getHeight(), Image.SCALE_SMOOTH)));
+		login.add(icono2);
+
+		this.revalidate();
+		this.repaint();
 
 		JLabel userName = new JLabel("Ingresa tu nombre: ");
 		userName.setSize(200, 20);
@@ -194,10 +229,62 @@ public class Ventana extends JFrame {
 		});
 		return login;
 	}
+	
+	public void panel_clientes() {
+		contenido.removeAll();
+		
+		JLabel titulo2 = new JLabel("Panel de clientes", JLabel.CENTER);
+		titulo2.setSize(650, 30);
+		titulo2.setLocation(0, 20);
+		titulo2.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo2);
+		
+		JButton btn_Consultar_clientes = new JButton("Consultar");
+		btn_Consultar_clientes.setSize(150, 40);
+		btn_Consultar_clientes.setLocation(100, 300);
+		btn_Consultar_clientes.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(btn_Consultar_clientes);
+		
+		btn_Consultar_clientes.addActionListener(new ActionListener() {
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes_consultar();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+			
+		});
+		
+		JButton btn_Crear = new JButton("Crear");
+		btn_Crear.setSize(150, 40);
+		btn_Crear.setLocation(400, 300);
+		btn_Crear.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(btn_Crear);
+		
+		JButton btn_Editar = new JButton("Editar");
+		btn_Editar.setSize(150, 40);
+		btn_Editar.setLocation(100, 440);
+		btn_Editar.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(btn_Editar);
+
+		JButton btn_Eliminar = new JButton("Eliminar");
+		btn_Eliminar.setSize(150, 40);
+		btn_Eliminar.setLocation(400, 440);
+		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(btn_Eliminar);
+		
+	}
 	public void panel_Tarifas() {
 		contenido.removeAll();
 
+		JLabel titulo3 = new JLabel("Panel de tarifas", JLabel.CENTER);
+		titulo3.setSize(650, 30);
+		titulo3.setLocation(0, 20);
+		titulo3.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo3);
+		
 		JButton btn_Consultar = new JButton("Consultar");
 		btn_Consultar.setSize(150, 40);
 		btn_Consultar.setLocation(100, 300);
@@ -238,7 +325,95 @@ public class Ventana extends JFrame {
 		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Eliminar);
 	}
+	
+	public void panel_clientes_consultar() {
+		contenido.removeAll();
+		
+		JLabel titulo = new JLabel("Datos de los clientes", JLabel.CENTER);
+		titulo.setSize(650, 30);
+		titulo.setLocation(0, 80);
+		titulo.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo);
 
+		String nombresColumna[] = { "Cliente", "Apellidos", "Fecha de nacimiento", "Telefono", "Total pagado" };
+		BufferedReader reader_Tarifa, reader_Cliente;
+		FileInputStream cliente;
+		datos_Tarifas = null;
+		datos_Clientes = null;
+		
+		try {
+			cliente = new FileInputStream("Users.txt");
+			reader_Tarifa = new BufferedReader(new FileReader("Tarifas.txt"));
+			reader_Cliente = new BufferedReader(new InputStreamReader(cliente));
+
+			String line_Tarifa = reader_Tarifa.readLine();
+			String line_Cliente = reader_Cliente.readLine();
+			JTable tabla = new JTable();
+			DefaultTableModel tablaModel = new DefaultTableModel();
+			tablaModel.setColumnIdentifiers(nombresColumna);
+
+			while (line_Tarifa != null) {
+				datos_Tarifas = line_Tarifa.split(",");
+				datos_Clientes = line_Cliente.split(",");
+				while (!datos_Tarifas[0].equals(datos_Clientes[3])) {
+					if (line_Cliente == null) {
+						break;
+					} else {
+						line_Cliente = reader_Cliente.readLine();
+						if (line_Cliente != null) {
+							datos_Clientes = line_Cliente.split(",");
+						}
+					}
+				}
+				if (line_Cliente != null) {
+					tablaModel.addRow(new Object[] { datos_Clientes[0] + " " + datos_Clientes[1], datos_Tarifas[1],
+							datos_Tarifas[2], datos_Tarifas[3] });
+				}
+				// Leer siguiente linea del archivo de tarifas
+				line_Tarifa = reader_Tarifa.readLine();
+				/*
+				 * Las siguientes lineas sirven para reiniciar el bufferedReader Clientes a la
+				 * posicion inicial del txt Users
+				 */
+				cliente.getChannel().position(0);
+				reader_Cliente = new BufferedReader(new InputStreamReader(cliente));
+				line_Cliente = reader_Cliente.readLine();
+			}
+			tabla.setModel(tablaModel);
+			JScrollPane sp = new JScrollPane(tabla);
+			sp.setSize(530, 300);
+			sp.setLocation(50, 140);
+			contenido.add(sp);
+			reader_Tarifa.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		JButton volver = new JButton("Volver");
+		volver.setSize(200, 35);
+		volver.setLocation(100, 470);
+		volver.setForeground(Color.decode("#EEE5DA"));
+		volver.setOpaque(true);
+		volver.setBackground(Color.decode("#713587"));
+		contenido.add(volver);
+		
+		volver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				contenido.removeAll();
+				panel_Tarifas();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+		});
+
+		contenido.revalidate();
+		contenido.repaint();
+	}
+	
+	
 	public void panel_Tarifas_Consultar() {
 		contenido.removeAll();
 
