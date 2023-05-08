@@ -287,6 +287,17 @@ public class Ventana extends JFrame {
 		btn_Editar.setLocation(100, 440);
 		btn_Editar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Editar);
+		btn_Editar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes_editar();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+			
+		});
 
 		JButton btn_Eliminar = new JButton("Eliminar");
 		btn_Eliminar.setSize(150, 40);
@@ -545,53 +556,53 @@ public class Ventana extends JFrame {
 		titulo.setFont(new Font("Arial", Font.BOLD, 23));
 		contenido.add(titulo);
 		
-		JLabel telefono = new JLabel("Nombre");
-		telefono.setSize(280, 30);
-		telefono.setLocation(60, 170);
-		telefono.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(telefono);
+		JLabel Nombre = new JLabel("Nombre");
+		Nombre.setSize(280, 30);
+		Nombre.setLocation(60, 170);
+		Nombre.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(Nombre);
 
-		JTextField in_Telefono = new JTextField();
-		in_Telefono.setSize(250, 30);
-		in_Telefono.setLocation(50, 220);
-		in_Telefono.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(in_Telefono);
+		JTextField in_nombre = new JTextField();
+		in_nombre.setSize(250, 30);
+		in_nombre.setLocation(50, 220);
+		in_nombre.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_nombre);
 
-		JLabel cuota = new JLabel("Apellidos");
-		cuota.setSize(150, 30);
-		cuota.setLocation(346, 170);
-		cuota.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(cuota);
+		JLabel apellidos = new JLabel("Apellidos");
+		apellidos.setSize(150, 30);
+		apellidos.setLocation(346, 170);
+		apellidos.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(apellidos);
 
-		JTextField in_Cuota = new JTextField();
-		in_Cuota.setSize(250, 30);
-		in_Cuota.setLocation(340, 220);
-		in_Cuota.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(in_Cuota);
+		JTextField in_apellidos = new JTextField();
+		in_apellidos.setSize(250, 30);
+		in_apellidos.setLocation(340, 220);
+		in_apellidos.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_apellidos);
 
-		JLabel fecha_Inicial = new JLabel("Fecha de nacimiento");
-		fecha_Inicial.setSize(280, 30);
-		fecha_Inicial.setLocation(45, 300);
-		fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(fecha_Inicial);
+		JLabel fecha_nacimiento = new JLabel("Fecha de nacimiento");
+		fecha_nacimiento.setSize(280, 30);
+		fecha_nacimiento.setLocation(45, 300);
+		fecha_nacimiento.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(fecha_nacimiento);
 
-		JTextField in_Fecha_Inicial = new JTextField();
-		in_Fecha_Inicial.setSize(250, 30);
-		in_Fecha_Inicial.setLocation(50, 350);
-		in_Fecha_Inicial.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(in_Fecha_Inicial);
+		JTextField in_Fecha_nacimiento = new JTextField();
+		in_Fecha_nacimiento.setSize(250, 30);
+		in_Fecha_nacimiento.setLocation(50, 350);
+		in_Fecha_nacimiento.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Fecha_nacimiento);
 
-		JLabel fecha_Final = new JLabel("Telefono celular");
-		fecha_Final.setSize(280, 30);
-		fecha_Final.setLocation(345, 300);
-		fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(fecha_Final);
+		JLabel telefono_celular = new JLabel("Telefono celular");
+		telefono_celular.setSize(280, 30);
+		telefono_celular.setLocation(345, 300);
+		telefono_celular.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono_celular);
 
-		JTextField in_Fecha_Final = new JTextField();
-		in_Fecha_Final.setSize(250, 30);
-		in_Fecha_Final.setLocation(340, 350);
-		in_Fecha_Final.setFont(new Font("Arial", Font.BOLD, 17));
-		contenido.add(in_Fecha_Final);
+		JTextField in_telefono_celular = new JTextField();
+		in_telefono_celular.setSize(250, 30);
+		in_telefono_celular.setLocation(340, 350);
+		in_telefono_celular.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_telefono_celular);
 
 		JButton crear = new JButton("Añadir cliente");
 		crear.setSize(200, 35);
@@ -600,6 +611,55 @@ public class Ventana extends JFrame {
 		crear.setOpaque(true);
 		crear.setBackground(Color.decode("#713587"));
 		contenido.add(crear);
+		crear.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+			    // TODO Auto-generated method stub
+			    BufferedReader reader_Clientes;
+			    String newClient = "";
+			    newClient += in_nombre.getText() + ",";
+			    newClient += in_apellidos.getText() + ",";
+			    newClient += in_Fecha_nacimiento.getText() + ",";
+			    newClient += in_telefono_celular.getText();
+
+			    if (!in_nombre.getText().isEmpty() && !in_apellidos.getText().isEmpty()
+			            && !in_Fecha_nacimiento.getText().isEmpty() && !in_telefono_celular.getText().isEmpty()) {
+			        try {
+			            reader_Clientes = new BufferedReader(new FileReader("Users.txt"));
+			            String line_Clientes = reader_Clientes.readLine();
+
+			            while (line_Clientes != null) {
+			                String[] datos_Clientes = line_Clientes.split(",");
+			                if (in_telefono_celular.getText().equals(datos_Clientes[3])) {
+			                    JOptionPane.showMessageDialog(null,
+			                            "Error, ya hay un cliente registrado con este número de teléfono.");
+			                    newClient = "";
+			                    break;
+			                } else {
+			                    line_Clientes = reader_Clientes.readLine();
+			                }
+			            }
+
+			            if (newClient != "") {
+			                FileWriter fw = new FileWriter("Users.txt", true);
+			                PrintWriter writer = new PrintWriter(fw);
+			                writer.println(newClient);
+			                JOptionPane.showMessageDialog(null, "Cliente añadido exitosamente.");
+			                writer.close();
+			                fw.close();
+			            }
+			        } catch (IOException e1) {
+			            // TODO Auto-generated catch block
+			            e1.printStackTrace();
+			        }
+			    } else {
+			        JOptionPane.showMessageDialog(null,
+			                "Error. Para añadir a un nuevo cliente tienes que rellenar todos los campos.");
+			    }
+			}
+
+		});
 		
 		JButton volver = new JButton("Volver");
 		volver.setSize(200, 35);
@@ -771,6 +831,127 @@ public class Ventana extends JFrame {
 			}
 		});
 
+		contenido.revalidate();
+		contenido.repaint();
+	}
+	
+	public void panel_clientes_editar() {
+		contenido.removeAll();
+		int contador = 1;
+
+		JLabel titulo = new JLabel("Editar cliente", JLabel.CENTER);
+		titulo.setSize(650, 30);
+		titulo.setLocation(0, 80);
+		titulo.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo);
+
+		JComboBox clientes = new JComboBox();
+		clientes.setSize(440, 30);
+		clientes.setLocation(100, 120);
+		contenido.add(clientes);
+
+		JLabel indicacion = new JLabel("Seleccione el numero de telefono del cliente que quiere hacer cambios",
+				JLabel.CENTER);
+		indicacion.setSize(650, 20);
+		indicacion.setLocation(0, 150);
+		indicacion.setFont(new Font("Arial", Font.BOLD, 11));
+		contenido.add(indicacion);
+
+		JLabel telefono_c = new JLabel("Cliente (Número de teléfono)");
+		telefono_c.setSize(280, 30);
+		telefono_c.setLocation(60, 200);
+		telefono_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono_c);
+
+		JTextField in_Telefono_c = new JTextField();
+		in_Telefono_c.setSize(250, 30);
+		in_Telefono_c.setLocation(50, 250);
+		in_Telefono_c.setFont(new Font("Arial", Font.BOLD, 17));
+		in_Telefono_c.setEditable(false);
+		contenido.add(in_Telefono_c);
+
+		JLabel nombre_c = new JLabel("Nombre");
+		nombre_c.setSize(150, 30);
+		nombre_c.setLocation(405, 200);
+		nombre_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(nombre_c);
+
+		JTextField in_nombre_c = new JTextField();
+		in_nombre_c.setSize(250, 30);
+		in_nombre_c.setLocation(340, 250);
+		in_nombre_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_nombre_c);
+
+		JLabel apellidos_c = new JLabel("Apellidos");
+		apellidos_c.setSize(280, 30);
+		apellidos_c.setLocation(45, 330);
+		apellidos_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(apellidos_c);
+
+		JTextField in_apellidos_c = new JTextField();
+		in_apellidos_c.setSize(250, 30);
+		in_apellidos_c.setLocation(50, 380);
+		in_apellidos_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_apellidos_c);
+
+		JLabel telefono_celular_c = new JLabel("Telefono celular");
+		telefono_celular_c.setSize(280, 30);
+		telefono_celular_c.setLocation(345, 330);
+		telefono_celular_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono_celular_c);
+
+		JTextField in_telefono_celular_c= new JTextField();
+		in_telefono_celular_c.setSize(250, 30);
+		in_telefono_celular_c.setLocation(340, 380);
+		in_telefono_celular_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_telefono_celular_c);
+		
+		JButton guardar_Cambios = new JButton("Guardar cambios");
+		guardar_Cambios.setSize(200, 35);
+		guardar_Cambios.setLocation(340, 460);
+		guardar_Cambios.setForeground(Color.decode("#EEE5DA"));
+		guardar_Cambios.setOpaque(true);
+		guardar_Cambios.setBackground(Color.decode("#713587"));
+		contenido.add(guardar_Cambios);
+
+		JButton volver = new JButton("Volver");
+		volver.setSize(200, 35);
+		volver.setLocation(100, 460);
+		volver.setForeground(Color.decode("#EEE5DA"));
+		volver.setOpaque(true);
+		volver.setBackground(Color.decode("#713587"));
+		contenido.add(volver);
+
+		volver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				contenido.removeAll();
+				panel_Clientes();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+		});
+		
+		datos_Tarifas = null;
+		BufferedReader reader_Tarifas;
+
+		// CODIGO PARA LLENAR EL COMBOBOX CON LOS CLIENTES REGISTRADOS
+		try {
+			reader_Tarifas = new BufferedReader(new FileReader("Tarifas.txt"));
+			String line = reader_Tarifas.readLine();
+
+			while (line != null) {
+				datos_Tarifas = line.split(",");
+				clientes.addItem(datos_Tarifas[0]);
+				// Leer la siguiente linea
+				line = reader_Tarifas.readLine();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 		contenido.revalidate();
 		contenido.repaint();
 	}
