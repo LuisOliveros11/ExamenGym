@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,12 +28,20 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+
+//LOS CAMBIOS SI SE GUARDAN PERO NO SE MUESTRAN EN LA TABLA, Y AGREGAR
+// LOS CLIENTES A LA TABLA.
+//ARREGLAR EL CRASHEO DE LA OPCION ELIMINAR
+
 public class Ventana extends JFrame {
 	JPanel padre = new JPanel();
 	JPanel contenido = new JPanel();
 	JPanel barra_lateral = new JPanel();
 	String[] datos_Clientes = null;
 	String[] datos_Tarifas = null;
+	Date fechaActual = new Date();
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+	String fechaActualSDF = sdf.format(fechaActual);
 
 	public Ventana() {
 		this.setVisible(true);
@@ -90,6 +101,14 @@ public class Ventana extends JFrame {
 		btn_Checador.setLocation(50, 370);
 		btn_Checador.setFont(new Font("Arial", Font.BOLD, 23));
 		barra_lateral.add(btn_Checador);
+
+		btn_Checador.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_Checador();
+			}
+		});
 
 		JButton btn_CerrarSesion = new JButton("Cerrar Sesión");
 		btn_CerrarSesion.setSize(150, 40);
@@ -303,6 +322,17 @@ public class Ventana extends JFrame {
 		btn_Eliminar.setLocation(400, 440);
 		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Eliminar);
+		btn_Eliminar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes_eliminar();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+			
+		});
 
 	}
 
@@ -430,7 +460,7 @@ public class Ventana extends JFrame {
 			sp.setSize(530, 300);
 			sp.setLocation(50, 140);
 			contenido.add(sp);
-			reader_Tarifa.close();
+			reader_Cliente.close();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -486,8 +516,8 @@ public class Ventana extends JFrame {
 			tablaModel.setColumnIdentifiers(nombresColumna);
 
 			while (line_Tarifa != null) {
-				datos_Tarifas = line_Tarifa.split(",");
-				datos_Clientes = line_Cliente.split(",");
+				datos_Clientes = line_Tarifa.split(",");
+				datos_Tarifas = line_Cliente.split(",");
 				while (!datos_Tarifas[0].equals(datos_Clientes[3])) {
 					if (line_Cliente == null) {
 						break;
@@ -604,6 +634,11 @@ public class Ventana extends JFrame {
 		in_telefono_celular.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(in_telefono_celular);
 
+		// FALTA EN LA OPCION DE EDITAR QUE SE PUEDA PONER LOS DATOS DE LOS CLIENTES Y
+		// SE GUARDEN LOS CAMBIOS, EN LA OPCION ELIMINAR QUE SALGA UN COMBO BOX
+		// CON LOS NOMBRES DE LOS CLIENTES Y TENGA UN BOTON ELIMINAR Y VOLVER Y AGREGAR
+		// LOS CLIENTES A LA TABLA.
+
 		JButton crear = new JButton("Añadir cliente");
 		crear.setSize(200, 35);
 		crear.setLocation(340, 460);
@@ -631,31 +666,28 @@ public class Ventana extends JFrame {
 
 						while (line_Clientes != null) {
 							String[] datos_Clientes = line_Clientes.split(",");
-							if (in_telefono_celular.getText().equals(datos_Clientes[3])) {
-								JOptionPane.showMessageDialog(null,
-										"Error, ya hay un cliente registrado con este número de teléfono.");
-								newClient = "";
-								break;
-							} else {
-								line_Clientes = reader_Clientes.readLine();
+							if (datos_Clientes[0].equals(newClient.split(",")[0])
+									&& datos_Clientes[1].equals(newClient.split(",")[1])) {
+								JOptionPane.showMessageDialog(null, "El cliente ya existe.");
+								return;
 							}
+							line_Clientes = reader_Clientes.readLine();
 						}
+						reader_Clientes.close();
 
-						if (newClient != "") {
-							FileWriter fw = new FileWriter("Users.txt", true);
-							PrintWriter writer = new PrintWriter(fw);
-							writer.println(newClient);
-							JOptionPane.showMessageDialog(null, "Cliente añadido exitosamente.");
-							writer.close();
-							fw.close();
-						}
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						BufferedWriter writer_Clientes = new BufferedWriter(new FileWriter("Users.txt", true));
+						writer_Clientes.write(newClient + "\n");
+						writer_Clientes.close();
+						JOptionPane.showMessageDialog(null, "El cliente ha sido agregado exitosamente.");
+						in_nombre.setText("");
+						in_apellidos.setText("");
+						in_Fecha_nacimiento.setText("");
+						in_telefono_celular.setText("");
+					} catch (IOException ex) {
+						JOptionPane.showMessageDialog(null, "Error al guardar los datos del cliente.");
 					}
 				} else {
-					JOptionPane.showMessageDialog(null,
-							"Error. Para añadir a un nuevo cliente tienes que rellenar todos los campos.");
+					JOptionPane.showMessageDialog(null, "Por favor, llene todos los campos.");
 				}
 			}
 
@@ -906,6 +938,51 @@ public class Ventana extends JFrame {
 		in_telefono_celular_c.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(in_telefono_celular_c);
 
+		datos_Clientes = null;
+		BufferedReader reader_Users;
+		// CODIGO PARA LLENAR EL COMBOBOX CON LOS CLIENTES REGISTRADOS
+		try {
+			reader_Users = new BufferedReader(new FileReader("Users.txt"));
+			String line = reader_Users.readLine();
+
+			while (line != null) {
+				datos_Clientes = line.split(",");
+				clientes.addItem(datos_Clientes[0]);
+				// Leer la siguiente linea
+				line = reader_Users.readLine();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		clientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				in_telefono_celular_c.setText(clientes.getSelectedItem().toString());
+
+				BufferedReader reader_Users;
+				try {
+					reader_Users = new BufferedReader(new FileReader("Users.txt"));
+					String line_Users = reader_Users.readLine();
+					while (line_Users != null) {
+						datos_Clientes = null;
+						datos_Clientes = line_Users.split(",");
+						if (datos_Clientes[0].equals(in_telefono_celular_c.getText())) {
+							in_apellidos_c.setText(datos_Clientes[1]);
+							in_nombre_c.setText(datos_Clientes[0]);
+							in_telefono_celular_c.setText(datos_Clientes[3]);
+							break;
+						} else {
+							line_Users = reader_Users.readLine();
+						}
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+
 		JButton guardar_Cambios = new JButton("Guardar cambios");
 		guardar_Cambios.setSize(200, 35);
 		guardar_Cambios.setLocation(340, 460);
@@ -913,6 +990,73 @@ public class Ventana extends JFrame {
 		guardar_Cambios.setOpaque(true);
 		guardar_Cambios.setBackground(Color.decode("#713587"));
 		contenido.add(guardar_Cambios);
+		guardar_Cambios.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				BufferedReader reader_Users;
+				if (!in_nombre_c.getText().isEmpty() && !in_apellidos_c.getText().isEmpty()
+						&& !in_apellidos_c.getText().isEmpty() && !in_telefono_celular_c.getText().isEmpty()) {
+					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Está seguro de guardar los cambios?");
+					if (confirmacion == 0) {
+						try {
+							// SE GUARDAN LOS DATOS ACTUALIZADOS
+							String datos_Actualizados = in_telefono_celular_c.getText() + ",";
+							datos_Actualizados += in_nombre_c.getText() + ",";
+							datos_Actualizados += in_apellidos_c.getText() + ",";
+<<<<<<< HEAD
+							datos_Actualizados += in_telefono_celular_c.getText()+",";
+=======
+							datos_Actualizados += in_telefono_celular_c.getText();
+>>>>>>> 273651a0c8b75ff061dfb9a5e9cbc913c244cfd7
+
+							// MATRIZ PARA ALMACENAR LOS DATOS EXISTENTES EN EL TXT QUE DESPUES SERAN
+							// VACIADOS
+							String[][] copiaDatos = new String[100][1];
+							// SE GUARDAN LOS DATOS EXISTENTES DEL TXT ANTES DE ELIMINARLOS
+							int i = 0;
+							reader_Users = new BufferedReader(new FileReader("Users.txt"));
+							String line = reader_Users.readLine();
+							while (line != null) {
+								copiaDatos[i][0] = line;
+								line = reader_Users.readLine();
+								i++;
+							}
+							// SE ELIMINAN LOS DATOS EXISTENTES EN EL TXT
+							BufferedWriter writter = new BufferedWriter(new FileWriter("Users.txt"));
+							// SE VUELVE A LLENAR EL TXT CON LOS DATOS GUARDADOS EN LA COPIA Y LOS
+							// ACTUALIZDOS
+							i = 0;
+							while (copiaDatos[i][0] != null) {
+								if (copiaDatos[i][0].contains(in_telefono_celular_c.getText())) {
+									i++;
+								} else {
+									writter.write(copiaDatos[i][0]);
+									writter.newLine();
+									i++;
+								}
+							}
+
+							writter.write(datos_Actualizados);
+							writter.newLine();
+							writter.close();
+							JOptionPane.showMessageDialog(null, "Información actualizada");
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						System.out.println("ok");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null,
+<<<<<<< HEAD
+							"Error. Para editar a un cliente deben ser llenados todos los campos");
+=======
+							"Error. Para editar a un cliente deben ser llenados todos los camposs");
+>>>>>>> 273651a0c8b75ff061dfb9a5e9cbc913c244cfd7
+				}
+			}
+		});
 
 		JButton volver = new JButton("Volver");
 		volver.setSize(200, 35);
@@ -932,25 +1076,6 @@ public class Ventana extends JFrame {
 				contenido.repaint();
 			}
 		});
-
-		datos_Tarifas = null;
-		BufferedReader reader_Tarifas;
-
-		// CODIGO PARA LLENAR EL COMBOBOX CON LOS CLIENTES REGISTRADOS
-		try {
-			reader_Tarifas = new BufferedReader(new FileReader("Tarifas.txt"));
-			String line = reader_Tarifas.readLine();
-
-			while (line != null) {
-				datos_Tarifas = line.split(",");
-				clientes.addItem(datos_Tarifas[0]);
-				// Leer la siguiente linea
-				line = reader_Tarifas.readLine();
-			}
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 
 		contenido.revalidate();
 		contenido.repaint();
@@ -1161,6 +1286,228 @@ public class Ventana extends JFrame {
 
 		contenido.revalidate();
 		contenido.repaint();
+	}
+
+	public void panel_clientes_eliminar() {
+<<<<<<< HEAD
+		contenido.removeAll();
+
+		JLabel titulo = new JLabel("Eliminar a cliente", JLabel.CENTER);
+		titulo.setSize(650, 30);
+		titulo.setLocation(0, 80);
+		titulo.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo);
+		
+		JComboBox clientes = new JComboBox();
+		clientes.setSize(440, 30);
+		clientes.setLocation(100, 120);
+		contenido.add(clientes);
+
+		JLabel indicacion = new JLabel("Selecciona el teléfono de el cliente al que deseas eliminar",
+				JLabel.CENTER);
+		indicacion.setSize(650, 20);
+		indicacion.setLocation(0, 150);
+		indicacion.setFont(new Font("Arial", Font.BOLD, 11));
+		contenido.add(indicacion);
+		
+		JLabel telefono_c = new JLabel("Cliente (Número de teléfono)");
+		telefono_c.setSize(280, 30);
+		telefono_c.setLocation(60, 200);
+		telefono_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono_c);
+
+		JTextField in_Telefono_c = new JTextField();
+		in_Telefono_c.setSize(250, 30);
+		in_Telefono_c.setLocation(50, 250);
+		in_Telefono_c.setFont(new Font("Arial", Font.BOLD, 17));
+		in_Telefono_c.setEditable(false);
+		contenido.add(in_Telefono_c);
+
+		JLabel nombre_c = new JLabel("Nombre");
+		nombre_c.setSize(150, 30);
+		nombre_c.setLocation(405, 200);
+		nombre_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(nombre_c);
+
+		JTextField in_nombre_c = new JTextField();
+		in_nombre_c.setSize(250, 30);
+		in_nombre_c.setLocation(340, 250);
+		in_nombre_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_nombre_c);
+
+		JLabel apellidos_c = new JLabel("Apellidos");
+		apellidos_c.setSize(280, 30);
+		apellidos_c.setLocation(45, 330);
+		apellidos_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(apellidos_c);
+
+		JTextField in_apellidos_c = new JTextField();
+		in_apellidos_c.setSize(250, 30);
+		in_apellidos_c.setLocation(50, 380);
+		in_apellidos_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_apellidos_c);
+
+		JLabel telefono_celular_c = new JLabel("Telefono celular");
+		telefono_celular_c.setSize(280, 30);
+		telefono_celular_c.setLocation(345, 330);
+		telefono_celular_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(telefono_celular_c);
+
+		JTextField in_telefono_celular_c = new JTextField();
+		in_telefono_celular_c.setSize(250, 30);
+		in_telefono_celular_c.setLocation(340, 380);
+		in_telefono_celular_c.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_telefono_celular_c);
+		
+		JButton volver = new JButton("Volver");
+		volver.setSize(200, 35);
+		volver.setLocation(100, 460);
+		volver.setForeground(Color.decode("#EEE5DA"));
+		volver.setOpaque(true);
+		volver.setBackground(Color.decode("#713587"));
+		contenido.add(volver);
+
+		volver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				contenido.removeAll();
+				panel_Clientes();
+				contenido.revalidate();
+				contenido.repaint();
+			}
+		});
+		
+		JButton eliminar = new JButton("Eliminar cliente");
+		eliminar.setSize(200, 35);
+		eliminar.setLocation(340, 460);
+		eliminar.setForeground(Color.decode("#EEE5DA"));
+		eliminar.setOpaque(true);
+		eliminar.setBackground(Color.decode("#713587"));
+		contenido.add(eliminar);
+		eliminar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				BufferedReader reader_Users;
+				if (!in_nombre_c.getText().isEmpty() && !in_apellidos_c.getText().isEmpty()
+						&& !in_apellidos_c.getText().isEmpty() && !in_telefono_celular_c.getText().isEmpty()) {
+					int confirmacion = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar a este cliente?");
+					if (confirmacion == 0) {
+						try {
+							// MATRIZ PARA ALMACENAR LOS DATOS EXISTENTES EN EL TXT QUE DESPUES SERAN
+							// VACIADOS
+							String[][] copiaDatos = new String[100][1];
+							// SE GUARDAN LOS DATOS EXISTENTES DEL TXT ANTES DE ELIMINARLOS
+							int i = 0;
+							reader_Users = new BufferedReader(new FileReader("Users.txt"));
+							String line = reader_Users.readLine();
+							while (line != null) {
+								copiaDatos[i][0] = line;
+								line = reader_Users.readLine();
+								i++;
+							}
+							// SE ELIMINAN LOS DATOS EXISTENTES EN EL TXT
+							BufferedWriter writter = new BufferedWriter(new FileWriter("Users.txt"));
+							// SE VUELVE A LLENAR EL TXT CON LOS DATOS GUARDADOS EN LA COPIA SIN LOS
+							// GUARDADOS A ELIMINAR
+							i = 0;
+							while (copiaDatos[i][0] != null) {
+								if (copiaDatos[i][0].contains(in_telefono_celular_c.getText())) {
+									i++;
+								} else {
+									writter.write(copiaDatos[i][0]);
+									writter.newLine();
+									i++;
+								}
+							}
+							writter.close();
+							JOptionPane.showMessageDialog(null, "Cliente eliminado correctamente.");
+							in_telefono_celular_c.setText("");
+							in_nombre_c.setText("");
+							in_apellidos_c.setText("");
+
+							clientes.removeAllItems();
+							// SE VUELVE A LLENAR EL COMBOBOX AHORA SIN EL ITEM ELIMINADO
+							datos_Clientes = null;
+							try {
+								reader_Users = new BufferedReader(new FileReader("Users.txt"));
+								line = reader_Users.readLine();
+
+								while (line != null) {
+									datos_Clientes = line.split(",");
+									clientes.addItem(datos_Tarifas[0]);
+									// Leer la siguiente linea
+									line = reader_Users.readLine();
+								}
+								clientes.revalidate();
+								clientes.repaint();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Error. Para eliminar a un cliente debe seleccionar uno primero.");
+				}
+			}
+			}
+			
+		);
+		
+		datos_Clientes = null;
+		BufferedReader reader_Users;
+		// CODIGO PARA LLENAR EL COMBOBOX CON LOS CLIENTES REGISTRADOS
+		try {
+			reader_Users = new BufferedReader(new FileReader("Users.txt"));
+			String line = reader_Users.readLine();
+
+			while (line != null) {
+				datos_Clientes = line.split(",");
+				clientes.addItem(datos_Clientes[0]);
+				// Leer la siguiente linea
+				line = reader_Users.readLine();
+			}
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		clientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				in_telefono_celular_c.setText(clientes.getSelectedItem().toString());
+
+				BufferedReader reader_Users;
+				try {
+					reader_Users = new BufferedReader(new FileReader("Users.txt"));
+					String line_Users = reader_Users.readLine();
+					while (line_Users != null) {
+						datos_Clientes = null;
+						datos_Clientes = line_Users.split(",");
+						if (datos_Clientes[0].equals(in_telefono_celular_c.getText())) {
+							in_apellidos_c.setText(datos_Clientes[1]);
+							in_nombre_c.setText(datos_Clientes[0]);
+							in_telefono_celular_c.setText(datos_Clientes[3]);
+							break;
+						} else {
+							line_Users = reader_Users.readLine();
+						}
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+=======
+
+>>>>>>> 273651a0c8b75ff061dfb9a5e9cbc913c244cfd7
 	}
 
 	public void panel_Tarifas_Eliminar() {
@@ -1380,6 +1727,102 @@ public class Ventana extends JFrame {
 					JOptionPane.showMessageDialog(null,
 							"Error. Para eliminar una tarifa debe seleccionar una primero.");
 				}
+			}
+		});
+
+		contenido.revalidate();
+		contenido.repaint();
+	}
+
+	public void panel_Checador() {
+		contenido.removeAll();
+
+		JLabel titulo = new JLabel("Checar vigencia", JLabel.CENTER);
+		titulo.setSize(650, 30);
+		titulo.setLocation(0, 80);
+		titulo.setFont(new Font("Arial", Font.BOLD, 23));
+		contenido.add(titulo);
+
+		JLabel indicacion = new JLabel("Ingresa tu PIN (Número de teléfono)");
+		indicacion.setSize(300, 30);
+		indicacion.setLocation(200, 240);
+		indicacion.setFont(new Font("Arial", Font.BOLD, 14));
+		contenido.add(indicacion);
+
+		JTextField in_Pin = new JTextField();
+		in_Pin.setSize(300, 30);
+		in_Pin.setLocation(175, 190);
+		in_Pin.setFont(new Font("Arial", Font.BOLD, 17));
+		contenido.add(in_Pin);
+
+		JButton verificar = new JButton("Verificar vigencia");
+		verificar.setSize(200, 35);
+		verificar.setLocation(340, 350);
+		verificar.setForeground(Color.decode("#EEE5DA"));
+		verificar.setOpaque(true);
+		verificar.setBackground(Color.decode("#713587"));
+		contenido.add(verificar);
+
+		JButton volver = new JButton("Volver");
+		volver.setSize(200, 35);
+		volver.setLocation(100, 350);
+		volver.setForeground(Color.decode("#EEE5DA"));
+		volver.setOpaque(true);
+		volver.setBackground(Color.decode("#713587"));
+		contenido.add(volver);
+
+		verificar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				String fechaVencimiento_Str;
+				if (!in_Pin.getText().isEmpty()) {
+					datos_Tarifas = null;
+					BufferedReader reader_Tarifas;
+					try {
+						reader_Tarifas = new BufferedReader(new FileReader("Tarifas.txt"));
+						String line = reader_Tarifas.readLine();
+						while (line != null) {
+							datos_Tarifas = line.split(",");
+							if (in_Pin.getText().equals(datos_Tarifas[0])) {
+								break;
+							} else {
+								// Leer la siguiente linea
+								line = reader_Tarifas.readLine();
+							}
+						}
+						if (line != null) {
+							fechaVencimiento_Str = datos_Tarifas[3];
+							Date fechaVencimiento_Date = sdf.parse(fechaVencimiento_Str);
+							if (fechaActual.after(fechaVencimiento_Date)) {
+								JOptionPane.showMessageDialog(null, "Tu tarifa venció el "
+										+ sdf.format(fechaVencimiento_Date) + ". Es necesario renovarla.");
+							} else {
+								JOptionPane.showMessageDialog(null,
+										"Tu tarifa sigue vigente hasta el " + sdf.format(fechaVencimiento_Date));
+							}
+						} else {
+							JOptionPane.showMessageDialog(null, "Error. Este PIN no está vinculado a ningun cliente.");
+						}
+					} catch (IOException | ParseException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Error. Para verificar una fecha debes ingresar un PIN correcto.");
+				}
+			}
+		});
+
+		volver.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				contenido.removeAll();
+				contenido.revalidate();
+				contenido.repaint();
 			}
 		});
 
