@@ -28,6 +28,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+
+//falta quitar crasheo de eliminar y que los datos se muestren en la tabla
 public class Ventana extends JFrame {
 	JPanel padre = new JPanel();
 	JPanel contenido = new JPanel();
@@ -51,7 +53,6 @@ public class Ventana extends JFrame {
 		barra_lateral.setLocation(0, 0);
 		barra_lateral.setBackground(Color.decode("#713587"));
 		barra_lateral.setLayout(null);
-
 		contenido.setSize(650, 550);
 		contenido.setLocation(250, 0);
 		contenido.setBackground(Color.decode("#EEE5DA"));
@@ -265,6 +266,22 @@ public class Ventana extends JFrame {
 		btn_Consultar_clientes.setLocation(100, 300);
 		btn_Consultar_clientes.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Consultar_clientes);
+		
+		ImageIcon consultar = new ImageIcon("consultar_icono.png");
+		JLabel consultar_icono = new JLabel();
+		consultar_icono.setSize(60, 60);
+		consultar_icono.setLocation(145, 220);
+		consultar_icono.setIcon(new ImageIcon(
+				consultar.getImage().getScaledInstance(consultar_icono.getWidth(), consultar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(consultar_icono);
+
+		btn_Consultar_clientes.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes_consultar();
+			}
+		});
 
 		btn_Consultar_clientes.addActionListener(new ActionListener() {
 
@@ -283,6 +300,23 @@ public class Ventana extends JFrame {
 		btn_Crear.setLocation(400, 300);
 		btn_Crear.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Crear);
+		
+		ImageIcon crear = new ImageIcon("crear.png");
+		JLabel crear_icono = new JLabel();
+		crear_icono.setSize(60, 60);
+		crear_icono.setLocation(445, 220);
+		crear_icono.setIcon(new ImageIcon(
+		crear.getImage().getScaledInstance(crear_icono.getWidth(), crear_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(crear_icono);
+		
+		btn_Crear.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes_crear();
+			}
+		});
+		
 		btn_Crear.addActionListener(new ActionListener() {
 
 			@Override
@@ -300,6 +334,23 @@ public class Ventana extends JFrame {
 		btn_Editar.setLocation(100, 440);
 		btn_Editar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Editar);
+		
+		ImageIcon editar = new ImageIcon("editar.png");
+		JLabel editar_icono = new JLabel();
+		editar_icono.setSize(60, 60);
+		editar_icono.setLocation(145, 360);
+		editar_icono.setIcon(new ImageIcon(
+				editar.getImage().getScaledInstance(editar_icono.getWidth(), editar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(editar_icono);
+		
+		btn_Editar.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				panel_clientes_editar();
+			}
+		});
+		
 		btn_Editar.addActionListener(new ActionListener() {
 
 			@Override
@@ -317,6 +368,23 @@ public class Ventana extends JFrame {
 		btn_Eliminar.setLocation(400, 440);
 		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Eliminar);
+		btn_Eliminar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				//panel_clientes_eliminar();
+			}
+			
+		});
+		
+		ImageIcon eliminar = new ImageIcon("eliminar.png");
+		JLabel eliminar_icono = new JLabel();
+		eliminar_icono.setSize(60, 60);
+		eliminar_icono.setLocation(445, 360);
+		eliminar_icono.setIcon(new ImageIcon(
+		eliminar.getImage().getScaledInstance(eliminar_icono.getWidth(), eliminar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(eliminar_icono);
 
 	}
 
@@ -334,6 +402,14 @@ public class Ventana extends JFrame {
 		btn_Consultar.setLocation(100, 300);
 		btn_Consultar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Consultar);
+		
+		ImageIcon consultar = new ImageIcon("consultar_icono.png");
+		JLabel consultar_icono = new JLabel();
+		consultar_icono.setSize(60, 60);
+		consultar_icono.setLocation(145, 220);
+		consultar_icono.setIcon(new ImageIcon(
+				consultar.getImage().getScaledInstance(consultar_icono.getWidth(), consultar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(consultar_icono);
 
 		btn_Consultar.addActionListener(new ActionListener() {
 			@Override
@@ -349,6 +425,14 @@ public class Ventana extends JFrame {
 		btn_Crear.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Crear);
 
+		ImageIcon crear = new ImageIcon("crear.png");
+		JLabel crear_icono = new JLabel();
+		crear_icono.setSize(60, 60);
+		crear_icono.setLocation(445, 220);
+		crear_icono.setIcon(new ImageIcon(
+				crear.getImage().getScaledInstance(crear_icono.getWidth(), crear_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(crear_icono);
+		
 		btn_Crear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -363,6 +447,14 @@ public class Ventana extends JFrame {
 		btn_Editar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Editar);
 
+		ImageIcon editar = new ImageIcon("editar.png");
+		JLabel editar_icono = new JLabel();
+		editar_icono.setSize(60, 60);
+		editar_icono.setLocation(145, 360);
+		editar_icono.setIcon(new ImageIcon(
+				editar.getImage().getScaledInstance(editar_icono.getWidth(), editar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(editar_icono);
+		
 		btn_Editar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -377,6 +469,14 @@ public class Ventana extends JFrame {
 		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Eliminar);
 
+		ImageIcon eliminar = new ImageIcon("eliminar.png");
+		JLabel eliminar_icono = new JLabel();
+		eliminar_icono.setSize(60, 60);
+		eliminar_icono.setLocation(445, 360);
+		eliminar_icono.setIcon(new ImageIcon(
+				eliminar.getImage().getScaledInstance(eliminar_icono.getWidth(), eliminar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(eliminar_icono);
+		
 		btn_Eliminar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -617,11 +717,6 @@ public class Ventana extends JFrame {
 		in_telefono_celular.setLocation(340, 350);
 		in_telefono_celular.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(in_telefono_celular);
-
-		// FALTA EN LA OPCION DE EDITAR QUE SE PUEDA PONER LOS DATOS DE LOS CLIENTES Y
-		// SE GUARDEN LOS CAMBIOS, EN LA OPCION ELIMINAR QUE SALGA UN COMBO BOX
-		// CON LOS NOMBRES DE LOS CLIENTES Y TENGA UN BOTON ELIMINAR Y VOLVER Y AGREGAR
-		// LOS CLIENTES A LA TABLA.
 
 		JButton crear = new JButton("Añadir cliente");
 		crear.setSize(200, 35);
@@ -1264,10 +1359,232 @@ public class Ventana extends JFrame {
 		contenido.repaint();
 	}
 
-	public void panel_clientes_eliminar() {
+	/*public void panel_clientes_eliminar() {
+	contenido.removeAll();
 
+	JLabel titulo = new JLabel("Eliminar a cliente", JLabel.CENTER);
+	titulo.setSize(650, 30);
+	titulo.setLocation(0, 80);
+	titulo.setFont(new Font("Arial", Font.BOLD, 23));
+	contenido.add(titulo);
+
+	JComboBox clientes = new JComboBox();
+	clientes.setSize(440, 30);
+	clientes.setLocation(100, 120);
+	contenido.add(clientes);
+
+	JLabel indicacion = new JLabel("Selecciona el teléfono de el cliente al que deseas eliminar",
+			JLabel.CENTER);
+	indicacion.setSize(650, 20);
+	indicacion.setLocation(0, 150);
+	indicacion.setFont(new Font("Arial", Font.BOLD, 11));
+	contenido.add(indicacion);
+
+	JLabel telefono_c = new JLabel("Cliente (Número de teléfono)");
+	telefono_c.setSize(280, 30);
+	telefono_c.setLocation(60, 200);
+	telefono_c.setFont(new Font("Arial", Font.BOLD, 17));
+	contenido.add(telefono_c);
+
+	JTextField in_Telefono_c = new JTextField();
+	in_Telefono_c.setSize(250, 30);
+	in_Telefono_c.setLocation(50, 250);
+	in_Telefono_c.setFont(new Font("Arial", Font.BOLD, 17));
+	in_Telefono_c.setEditable(false);
+	contenido.add(in_Telefono_c);
+
+	JLabel nombre_c = new JLabel("Nombre");
+	nombre_c.setSize(150, 30);
+	nombre_c.setLocation(405, 200);
+	nombre_c.setFont(new Font("Arial", Font.BOLD, 17));
+	contenido.add(nombre_c);
+
+	JTextField in_nombre_c = new JTextField();
+	in_nombre_c.setSize(250, 30);
+	in_nombre_c.setLocation(340, 250);
+	in_nombre_c.setFont(new Font("Arial", Font.BOLD, 17));
+	contenido.add(in_nombre_c);
+
+	JLabel apellidos_c = new JLabel("Apellidos");
+	apellidos_c.setSize(280, 30);
+	apellidos_c.setLocation(45, 330);
+	apellidos_c.setFont(new Font("Arial", Font.BOLD, 17));
+	contenido.add(apellidos_c);
+
+	JTextField in_apellidos_c = new JTextField();
+	in_apellidos_c.setSize(250, 30);
+	in_apellidos_c.setLocation(50, 380);
+	in_apellidos_c.setFont(new Font("Arial", Font.BOLD, 17));
+	contenido.add(in_apellidos_c);
+
+	JLabel telefono_celular_c = new JLabel("Telefono celular");
+	telefono_celular_c.setSize(280, 30);
+	telefono_celular_c.setLocation(345, 330);
+	telefono_celular_c.setFont(new Font("Arial", Font.BOLD, 17));
+	contenido.add(telefono_celular_c);
+
+	JTextField in_telefono_celular_c = new JTextField();
+	in_telefono_celular_c.setSize(250, 30);
+	in_telefono_celular_c.setLocation(340, 380);
+	in_telefono_celular_c.setFont(new Font("Arial", Font.BOLD, 17));
+	contenido.add(in_telefono_celular_c);
+
+	JButton volver = new JButton("Volver");
+	volver.setSize(200, 35);
+	volver.setLocation(100, 460);
+	volver.setForeground(Color.decode("#EEE5DA"));
+	volver.setOpaque(true);
+	volver.setBackground(Color.decode("#713587"));
+	contenido.add(volver);
+	
+	datos_Clientes = null;
+	BufferedReader reader_Users;
+	// CODIGO PARA LLENAR EL COMBOBOX CON LOS CLIENTES REGISTRADOS
+	try {
+		reader_Users = new BufferedReader(new FileReader("Users.txt"));
+		String line = reader_Users.readLine();
+
+		while (line != null) {
+			datos_Clientes = line.split(",");
+			clientes.addItem(datos_Clientes[0]);
+			// Leer la siguiente linea
+			line = reader_Users.readLine();
+		}
+	} catch (IOException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
 	}
 
+	volver.addActionListener(new ActionListener() {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			contenido.removeAll();
+			panel_Clientes();
+			contenido.revalidate();
+			contenido.repaint();
+		}
+	});
+
+	JButton eliminar = new JButton("Eliminar cliente");
+	eliminar.setSize(200, 35);
+	eliminar.setLocation(340, 460);
+	eliminar.setForeground(Color.decode("#EEE5DA"));
+	eliminar.setOpaque(true);
+	eliminar.setBackground(Color.decode("#713587"));
+	contenido.add(eliminar);
+/*			
+	eliminar.addActionListener(new ActionListener() {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			BufferedReader reader_Users;
+			if (!in_nombre_c.getText().isEmpty() && !in_apellidos_c.getText().isEmpty()
+					&& !in_apellidos_c.getText().isEmpty() && !in_telefono_celular_c.getText().isEmpty()) {
+				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar a este cliente?");
+				if (confirmacion == 0) {
+					try {
+						// MATRIZ PARA ALMACENAR LOS DATOS EXISTENTES EN EL TXT QUE DESPUES SERAN
+						// VACIADOS
+						String[][] copiaDatos = new String[100][1];
+						// SE GUARDAN LOS DATOS EXISTENTES DEL TXT ANTES DE ELIMINARLOS
+						int i = 0;
+						reader_Users = new BufferedReader(new FileReader("Users.txt"));
+						String line = reader_Users.readLine();
+						while (line != null) {
+							copiaDatos[i][0] = line;
+							line = reader_Users.readLine();
+							i++;
+						}
+						// SE ELIMINAN LOS DATOS EXISTENTES EN EL TXT
+						BufferedWriter writter = new BufferedWriter(new FileWriter("Users.txt"));
+						// SE VUELVE A LLENAR EL TXT CON LOS DATOS GUARDADOS EN LA COPIA SIN LOS
+						// GUARDADOS A ELIMINAR
+						i = 0;
+						while (copiaDatos[i][0] != null) {
+							if (copiaDatos[i][0].contains(in_telefono_celular_c.getText())) {
+								i++;
+							} else {
+								writter.write(copiaDatos[i][0]);
+								writter.newLine();
+								i++;
+							}
+						}
+						writter.close();
+						JOptionPane.showMessageDialog(null, "Cliente eliminado correctamente.");
+						in_telefono_celular_c.setText("");
+						in_nombre_c.setText("");
+						in_apellidos_c.setText("");
+
+						clientes.removeAllItems();
+						// SE VUELVE A LLENAR EL COMBOBOX AHORA SIN EL ITEM ELIMINADO
+						datos_Clientes = null;
+						try {
+							reader_Users = new BufferedReader(new FileReader("Users.txt"));
+							line = reader_Users.readLine();
+
+							while (line != null) {
+								datos_Clientes = line.split(",");
+								clientes.addItem(datos_Tarifas[0]);
+								// Leer la siguiente linea
+								line = reader_Users.readLine();
+							}
+							clientes.revalidate();
+							clientes.repaint();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			} else {
+				JOptionPane.showMessageDialog(null,
+						"Error. Para eliminar a un cliente debe seleccionar uno primero.");
+			}
+		}
+		}
+
+	);
+
+	clientes.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			if (clientes.getSelectedItem() != null) {
+				in_telefono_celular_c.setText(clientes.getSelectedItem().toString());
+			}
+
+			BufferedReader reader_Users;
+			try {
+				reader_Users = new BufferedReader(new FileReader("Users.txt"));
+				String line_Users = reader_Users.readLine();
+				while (line_Users != null) {
+					datos_Clientes = null;
+					datos_Clientes = line_Users.split(",");
+					if (datos_Clientes.length > 0 && datos_Clientes[0].equals(in_telefono_celular_c.getText())) {
+					    in_apellidos_c.setText(datos_Clientes[1]);
+					    in_nombre_c.setText(datos_Clientes[0]);
+					    in_telefono_celular_c.setText(datos_Clientes[3]);
+					    break;
+					} else {
+					    line_Users = reader_Users.readLine();
+					} {
+						line_Users = reader_Users.readLine();
+					}
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
+	});
+	contenido.revalidate();
+	contenido.repaint();
+	}*/
+	
 	public void panel_Tarifas_Eliminar() {
 		contenido.removeAll();
 
@@ -1588,3 +1905,4 @@ public class Ventana extends JFrame {
 		contenido.repaint();
 	}
 }
+
