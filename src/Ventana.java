@@ -51,7 +51,6 @@ public class Ventana extends JFrame {
 		barra_lateral.setLocation(0, 0);
 		barra_lateral.setBackground(Color.decode("#713587"));
 		barra_lateral.setLayout(null);
-
 		contenido.setSize(650, 550);
 		contenido.setLocation(250, 0);
 		contenido.setBackground(Color.decode("#EEE5DA"));
@@ -334,6 +333,14 @@ public class Ventana extends JFrame {
 		btn_Consultar.setLocation(100, 300);
 		btn_Consultar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Consultar);
+		
+		ImageIcon consultar = new ImageIcon("consultar_icono.png");
+		JLabel consultar_icono = new JLabel();
+		consultar_icono.setSize(60, 60);
+		consultar_icono.setLocation(145, 220);
+		consultar_icono.setIcon(new ImageIcon(
+				consultar.getImage().getScaledInstance(consultar_icono.getWidth(), consultar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(consultar_icono);
 
 		btn_Consultar.addActionListener(new ActionListener() {
 			@Override
@@ -349,6 +356,14 @@ public class Ventana extends JFrame {
 		btn_Crear.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Crear);
 
+		ImageIcon crear = new ImageIcon("crear.png");
+		JLabel crear_icono = new JLabel();
+		crear_icono.setSize(60, 60);
+		crear_icono.setLocation(445, 220);
+		crear_icono.setIcon(new ImageIcon(
+				crear.getImage().getScaledInstance(crear_icono.getWidth(), crear_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(crear_icono);
+		
 		btn_Crear.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -363,6 +378,14 @@ public class Ventana extends JFrame {
 		btn_Editar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Editar);
 
+		ImageIcon editar = new ImageIcon("editar.png");
+		JLabel editar_icono = new JLabel();
+		editar_icono.setSize(60, 60);
+		editar_icono.setLocation(145, 360);
+		editar_icono.setIcon(new ImageIcon(
+				editar.getImage().getScaledInstance(editar_icono.getWidth(), editar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(editar_icono);
+		
 		btn_Editar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -377,6 +400,14 @@ public class Ventana extends JFrame {
 		btn_Eliminar.setFont(new Font("Arial", Font.BOLD, 17));
 		contenido.add(btn_Eliminar);
 
+		ImageIcon eliminar = new ImageIcon("eliminar.png");
+		JLabel eliminar_icono = new JLabel();
+		eliminar_icono.setSize(60, 60);
+		eliminar_icono.setLocation(445, 360);
+		eliminar_icono.setIcon(new ImageIcon(
+				eliminar.getImage().getScaledInstance(eliminar_icono.getWidth(), eliminar_icono.getHeight(), Image.SCALE_SMOOTH)));
+		contenido.add(eliminar_icono);
+		
 		btn_Eliminar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
