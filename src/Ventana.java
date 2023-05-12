@@ -373,7 +373,7 @@ public class Ventana extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				//panel_clientes_eliminar();
+				panel_clientes_eliminar();
 			}
 			
 		});
@@ -755,7 +755,8 @@ public class Ventana extends JFrame {
 						reader_Clientes.close();
 
 						BufferedWriter writer_Clientes = new BufferedWriter(new FileWriter("Users.txt", true));
-						writer_Clientes.write(newClient + "\n");
+						writer_Clientes.write(newClient);
+						writer_Clientes.newLine();
 						writer_Clientes.close();
 						JOptionPane.showMessageDialog(null, "El cliente ha sido agregado exitosamente.");
 						in_nombre.setText("");
@@ -1359,7 +1360,7 @@ public class Ventana extends JFrame {
 		contenido.repaint();
 	}
 
-	/*public void panel_clientes_eliminar() {
+	public void panel_clientes_eliminar() {
 	contenido.removeAll();
 
 	JLabel titulo = new JLabel("Eliminar a cliente", JLabel.CENTER);
@@ -1473,15 +1474,15 @@ public class Ventana extends JFrame {
 	eliminar.setOpaque(true);
 	eliminar.setBackground(Color.decode("#713587"));
 	contenido.add(eliminar);
-/*			
+		 	
 	eliminar.addActionListener(new ActionListener() {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			BufferedReader reader_Users;
-			if (!in_nombre_c.getText().isEmpty() && !in_apellidos_c.getText().isEmpty()
-					&& !in_apellidos_c.getText().isEmpty() && !in_telefono_celular_c.getText().isEmpty()) {
+			BufferedReader reader_Tarifas;
+			if (!in_nombre_c.getText().isEmpty() && !telefono_celular_c.getText().isEmpty()
+					&& !in_Telefono_c.getText().isEmpty()) {
 				int confirmacion = JOptionPane.showConfirmDialog(null, "¿Está seguro de eliminar a este cliente?");
 				if (confirmacion == 0) {
 					try {
@@ -1490,11 +1491,11 @@ public class Ventana extends JFrame {
 						String[][] copiaDatos = new String[100][1];
 						// SE GUARDAN LOS DATOS EXISTENTES DEL TXT ANTES DE ELIMINARLOS
 						int i = 0;
-						reader_Users = new BufferedReader(new FileReader("Users.txt"));
-						String line = reader_Users.readLine();
+						reader_Tarifas = new BufferedReader(new FileReader("Users.txt"));
+						String line = reader_Tarifas.readLine();
 						while (line != null) {
 							copiaDatos[i][0] = line;
-							line = reader_Users.readLine();
+							line = reader_Tarifas.readLine();
 							i++;
 						}
 						// SE ELIMINAN LOS DATOS EXISTENTES EN EL TXT
@@ -1503,7 +1504,7 @@ public class Ventana extends JFrame {
 						// GUARDADOS A ELIMINAR
 						i = 0;
 						while (copiaDatos[i][0] != null) {
-							if (copiaDatos[i][0].contains(in_telefono_celular_c.getText())) {
+							if (copiaDatos[i][0].contains(in_Telefono_c.getText())) {
 								i++;
 							} else {
 								writter.write(copiaDatos[i][0]);
@@ -1513,22 +1514,22 @@ public class Ventana extends JFrame {
 						}
 						writter.close();
 						JOptionPane.showMessageDialog(null, "Cliente eliminado correctamente.");
-						in_telefono_celular_c.setText("");
+						in_Telefono_c.setText("");
 						in_nombre_c.setText("");
-						in_apellidos_c.setText("");
+						telefono_celular_c.setText("");
 
 						clientes.removeAllItems();
 						// SE VUELVE A LLENAR EL COMBOBOX AHORA SIN EL ITEM ELIMINADO
-						datos_Clientes = null;
+						datos_Tarifas = null;
 						try {
-							reader_Users = new BufferedReader(new FileReader("Users.txt"));
-							line = reader_Users.readLine();
+							reader_Tarifas = new BufferedReader(new FileReader("Users.txt"));
+							line = reader_Tarifas.readLine();
 
 							while (line != null) {
 								datos_Clientes = line.split(",");
 								clientes.addItem(datos_Tarifas[0]);
 								// Leer la siguiente linea
-								line = reader_Users.readLine();
+								line = reader_Tarifas.readLine();
 							}
 							clientes.revalidate();
 							clientes.repaint();
@@ -1543,7 +1544,7 @@ public class Ventana extends JFrame {
 				}
 			} else {
 				JOptionPane.showMessageDialog(null,
-						"Error. Para eliminar a un cliente debe seleccionar uno primero.");
+						"Error. Para eliminar a un cliente debe seleccionar a uno primero.");
 			}
 		}
 		}
@@ -1583,7 +1584,7 @@ public class Ventana extends JFrame {
 	});
 	contenido.revalidate();
 	contenido.repaint();
-	}*/
+	}
 	
 	public void panel_Tarifas_Eliminar() {
 		contenido.removeAll();
@@ -1905,4 +1906,6 @@ public class Ventana extends JFrame {
 		contenido.repaint();
 	}
 }
+
+
 
